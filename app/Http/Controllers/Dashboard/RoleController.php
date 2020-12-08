@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\RoleRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Role;
 class RoleController extends Controller
 {
@@ -36,6 +39,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        /*$validate = $this->validate($request,
+            [
+                'name' => 'unique:roles|required|name'
+            ],
+            [
+                'name.unique' => 'Tên đã tồn tại'
+            ]
+        );*/
         $data = $request->all();
         Role::create($data);
         return redirect()->route('dashboards.roles.list_role');
@@ -87,7 +98,7 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $roles = Role::find($id);
-        $roles->delete();
+        // $roles->delete();
         $roles->users()->delete();
         return redirect()->route('dashboards.roles.list_role');
     }

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="">
     <head>
@@ -26,6 +25,7 @@
     <body>
     
         @include('layouts.header')
+        @include('layouts.slidebar')
         @yield('content')
         @include('layouts.footer')
 

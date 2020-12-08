@@ -1,4 +1,5 @@
-@extends('dashboards.layout.master')
+@extends('dashboards.layout.index')
+@section('js')
 @section('content')
 <form action="{{route('dashboards.products.store')}}" method="POST" role="form">
 	<legend>Create Products</legend>
@@ -19,24 +20,21 @@
 	</div>
 
 	<div class="form-group">
-		<label for="">image</label>
+		<label for="">Price</label>
+		<input type="text" class="form-control" name="price" placeholder="Input field">
+	</div>
+
+	<div class="form-group">
+		<label for="">Image</label>
 		<input type="file" name="image" class="form-control" placeholder="Input field">
 	</div>
 
-	<div class="form-group">
-		<label for="">Author ID</label>
-		<input type="number" class="form-control" name="author_id" placeholder="Input field">
-	</div>
-
-	<div class="form-group">
-		<label for="">Publisher ID</label>
-		<input type="number" class="form-control" name="publisher_id" placeholder="Input field">
-	</div>
-
-	<div class="form-group">
-		<label for="">Category ID</label>
-		<input type="number" class="form-control" name="category_id" placeholder="Input field">
-	</div>
+	<select name="author_id" id="inputAuthor_id" class="form-control" required="required">
+		<option value="">Select</option>
+		@foreach($authors as $author)
+		<option value="{{$author->id}}"><span class="badge badge-secondary">{{$author->name}}</span></option>
+		@endforeach
+	</select>
 
 	<button type="submit" class="btn btn-primary" action="save">Create</button>
 </form>

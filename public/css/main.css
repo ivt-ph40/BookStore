@@ -21082,8 +21082,7 @@ p.form-messege {
   height: 50px;
   padding: 0 40px; }
 
-.contact-info {
-  text-align: center; }
+.contact-info {margin:0px;}
   .contact-info .icon {
     width: 88px;
     height: 88px;
@@ -21092,7 +21091,7 @@ p.form-messege {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    margin: 0 auto;
+    /*margin: 0 auto;*/
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;

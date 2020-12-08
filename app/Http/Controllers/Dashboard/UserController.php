@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use BD;
+use App\Models\Role;
 
 class UserController extends Controller
 {
@@ -14,7 +16,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with('role')->orderBy('created_at','ASC')->get();
+        // $users = BD::table('users')
+                    // ->join('roles',function($join){
+                    //     $join->on('users.role_id', '=', 'roles.id');
+                    // })
+                    // ->orderBy('users.id','ASC')
+                    // ->get();
         return view('dashboards.users.list_user', compact('users'));
     }
 
@@ -25,7 +33,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('dashboards.users.create_user');
+        $roles = Role::all();
+        return view('dashboards.users.create_user', compact('roles'));
     }
 
     /**
@@ -50,7 +59,10 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $users = User::where('id', '=', $id)
+                    ->first();
+        return view('dashboards.users.detail_user', compact('users'));
+        // dd($users);
     }
 
     /**
@@ -61,8 +73,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $users = User::find($id);
-        return view('dashboards.users.edit_user', compact('users'));
+        $roles = Role::all();
+        $users = User::where('id','=', $id)
+                    ->first();
+        return view('dashboards.users.edit_user', compact('users','roles'));
+                    //dd($users);
     }
 
     /**
@@ -76,7 +91,7 @@ class UserController extends Controller
     {
         $data = $request->except('_token', '_method');
         $data['password'] = bcrypt($data['password']);
-        User::find($id)->update($data);
+        User::where('id', '=', $id)->first()->update($data);
         return redirect()->route('dashboards.users.list_user');
     }
 
@@ -88,6 +103,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $users = User::find($id);
+        $users->reviews()->delete();
+        $users->orders()->delete();
+        return redirect()->route('dashboards.users.list_user');
     }
 }

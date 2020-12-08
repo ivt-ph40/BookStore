@@ -10,34 +10,69 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Route::get('/admin', function () {return view('dashboards.layout.index')->name('dashboards.layout.index');});
 
-Route::get('/', function () {
-    return view('fronts.home.index');
-});
-// Route::get('/admin', function () {
-//     return view('dashboards.layout.index')->name('dashboards.layout.index');
-// });
-//AUth
-Route::get('/login','Auth\LoginController@showLoginForm')->name('form-login');
-Route::post('/login','Auth\LoginController@login')->name('login');
-Route::get('/logout','Auth\LoginController@logout')->name('logout');
-Route::get('/register','Auth\RegisterController@showRegistrationForm')->name('form-register');
-Route::post('/register','Auth\RegisterController@register')->name('register');
+Route::get('/', function () {return view('fronts.home.index');});
 
-//admin
-Route::get('/admin','Dashboard\HomeController@index')->name('admin-dashboard');
-
-//Front
-Route::get('/product','Front\ProductController@index')->name('list-product');
-Route::get('/product/{id}/detail','Front\ProductController@productDetail')->name('product.detail');
-
-
-//homepage
+//Homepage
 Route::get('/','Front\HomeController@index')->name('front-dashboard');
 
+//Front
+//Show product:
+Route::get('/product','Front\ProductController@index')->name('list-product');
+
+//Show product category
+Route::get('/product/{id}','Front\ProductController@cateProduct')->name('cate-product');
+
+//Show infomation user detail:
+Route::get('/user/{id}/detail', 'Front\UserController@userDetail')->name('user-detail');
+
+//Show edit user:
+Route::get('/user/{id}/edit','Front\UserController@edit')->name('user-edit');
+
+//Update infomation:
+Route::put('/user/{id}','Front\UserController@update')->name('user-update');
+
+//Show detail product:
+Route::get('/product/{id}/detail','Front\ProductController@productDetail')->name('product.detail');
+
+Route::get('/product/{id}/show', 'Front\ProductController@show')->name('fronts.product.show');
+
+//Cart
+Route::post('/add-cart','Front\CartController@add-cart-ajax')->name('add.cart');
+
+Route::post('/save-cart','Front\CartController@save_cart')->name('save-cart');
+
+Route::get('/show-cart','Front\CartController@index')->name('show-cart');
+
+Route::get('/delete-to-cart/{rowId}','Front\CartController@deleteToCart')->name('delete-to-cart');
+
+Route::post('/update-to-cart','Front\CartController@updateQuantityToCart')->name('update-to-cart-quantity');
 
 
+//Checkout
+Route::get('/checkout','Front\CheckoutController@checkout')->name('checkout');
+
+Route::get('/show-checkout','Front\CheckoutController@index')->name('show-checkout');
+
+
+//Auth:
 Auth::routes();
+
+//Admin:
+Route::get('/admin','Dashboard\HomeController@index')->name('admin-dashboard');
+
+Route::get('/login','Auth\LoginController@showLoginForm')->name('form-login');
+
+Route::post('/login','Auth\LoginController@login')->name('login');
+
+Route::get('/logout','Auth\LoginController@logout')->name('logout');
+
+Route::get('/register','Auth\RegisterController@showRegistrationForm')->name('form-register');
+
+Route::post('/register','Auth\RegisterController@register')->name('register');
+
+//List:
 
 Route::get('/admin/list_role', 'Dashboard\RoleController@index')->name('dashboards.roles.list_role');
 
@@ -161,3 +196,16 @@ Route::put('/admin/{id}/list_review', 'Dashboard\ReviewController@update')->name
 
 Route::delete('/admin/{id}/list_role', 'Dashboard\RoleController@destroy')->name('dashboards.roles.destroy');
 
+Route::delete('/admin/{id}/list_address','Dashboard\AddressController@destroy')->name('dashboards.addresses.destroy');
+
+Route::delete('/admin/{id}/list_publisher', 'Dashboard\PublisherController@destroy')->name('dashboards.publishers.destroy');
+
+Route::delete('/admin/{id}/list_user', 'Dashboard\UserController@destroy')->name('dashboards.users.destroy');
+
+Route::delete('/admin/{id}/list_order', 'Dashboard\OrderController@destroy')->name('dashboards.orders.destroy');
+
+Route::delete('admin/{id}/list_product', 'Dashboard\ProductController@destroy')->name('dashboards.products.destroy');
+
+//Show:
+
+Route::get('/admin/{id}/detail_user', 'Dashboard\UserController@show')->name('dashboards.users.detail_user');

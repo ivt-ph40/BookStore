@@ -65,7 +65,6 @@
                                 <div class="header-slider-item">
                                     <img src="img/bannerbook.jpg" alt="Slider Image" />
                                     <div class="header-slider">
-                                        
                                     </div>
                                 </div>
                                 <div class="header-slider-item">
@@ -85,11 +84,9 @@
                             <div class="header-img">
                                 <div class="img-item">
                                     <img src="img/bannerbook4.jpg" />
-                                    
                                 </div>
                                 <div class="img-item">
                                     <img src="img/bannerbook5.jpg" />
-                                    
                                 </div>
                             </div>
                         </div>

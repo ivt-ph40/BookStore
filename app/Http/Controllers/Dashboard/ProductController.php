@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Dashboard;
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Author;
+// use App\Models\Publisher;
+// use App\Models\Category;
 class ProductController extends Controller
 {
     /**
@@ -14,9 +16,25 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        return view('dashboards.products.list_product', compact('products'));
+        // $products = Product::all();
+        $products = Product::with('authors')
+                        ->join('authors', function($join){
+                                $join->on('products.author_id', '=', 'authors.id');
+                        })
+                        ->orderBy('products.name', 'ASC')
+                        ->get();
+        // return view('dashboards.products.list_product', compact('products'));
+                        dd($products);
     }
+    // public function publisher() {
+    //     $producs = Product::with('publisher')
+    //                     ->join('publishers', function($join){
+    //                             $join->on('products.publisher_id', '=', 'publishers.id');
+    //                     })
+    //                     orderBy('products.name', 'ASC')
+    //                     ->get();
+    //     return view('dashboards.products.list_product', compact('products'));
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -25,7 +43,10 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('dashboards.products.create_product');
+        $authors = Author::all();
+        // $publishers = Publisher::all();
+        // $categories = Category::all();
+        return view('dashboards.products.create_product', compact('authors'));
     }
 
     /**
@@ -47,7 +68,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($name)
     {
         //
     }
@@ -58,10 +79,14 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($name)
     {
-        $products = Product::find($id);
-        return view('dashboards.products.edit_product', compact('products'));
+        $authors = Author::all();
+        // $publishers = Publisher::all();
+        // $categories = Category::all();
+        $products = Product::where('name', '=', $name)
+                    ->first();
+        return view('dashboards.products.edit_product', compact('products', 'authors'));
     }
 
     /**
@@ -71,10 +96,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $name)
     {
         $data = $request->all();
-        Product::find($id)->update($data);
+        Product::where('name', '=', $name)->update($data);
         return redirect()->route('dashboards.products.list_product');
     }
 
@@ -84,8 +109,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($name)
     {
-        //
+        $products = Product::find($id);
+        $products->reviews()->delete();
+        $products->orderDetails()->delete();
+        return redirect()->route('dashboards.products.list_product');
     }
 }

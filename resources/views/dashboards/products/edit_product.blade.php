@@ -1,7 +1,8 @@
-@extends('dashboards.layout.master')
+@extends('dashboards.layout.index')
+@section('js')
 @section('content')
 <h1>Edit: {{$products->name}}</h1>
-<form action="{{route('dashboards.products.update', $products->id)}}" method="POST" role="form">
+<form action="{{route('dashboards.products.update', $products->name)}}" method="POST" category="form">
 	
 	@csrf
 
@@ -23,24 +24,35 @@
 	</div>
 
 	<div class="form-group">
+		<label for="">Price</label>
+		<input type="number" class="form-control" name="price" placeholder="Input field" value="{{$products->price}}">
+	</div>
+
+	<div class="form-group">
 		<label for="">image</label>
 		<input type="file" name="image" class="form-control" placeholder="Input field" value="{{$products->image}}">
 	</div>
 
-	<div class="form-group">
-		<label for="">Author ID</label>
-		<input type="number" class="form-control" name="author_id" placeholder="Input field" value="{{$products->author_id}}">
-	</div>
+	<select name="author_id" id="inputAuthor_id" class="form-control" required="required">
+		<option value="">Select</option>
+		@foreach($authors as $author)
+		<option value="{{$author->id}}"><span class="badge badge-secondary">{{$author->name}}</span></option>
+		@endforeach
+	</select>
 
-	<div class="form-group">
-		<label for="">Publisher ID</label>
-		<input type="number" class="form-control" name="publisher_id" placeholder="Input field" value="{{$products->publisher_id}}">
-	</div>
+	<select name="publisher_id" id="inputPublisher_id" class="form-control" required="required">
+		<option value="">Select</option>
+		@foreach($publishers as $publisher)
+		<option value="{{$publisher->id}}"><span class="badge badge-secondary">{{$publisher->name}}</span></option>
+		@endforeach
+	</select>
 
-	<div class="form-group">
-		<label for="">Category ID</label>
-		<input type="number" class="form-control" name="category_id" placeholder="Input field" value="{{$products->category_id}}">
-	</div>
+	<select name="category_id" id="inputcategory_id" class="form-control" required="required">
+		<option value="">Select</option>
+		@foreach($categories as $category)
+		<option value="{{$category->id}}"><span class="badge badge-secondary">{{$category->name}}</span></option>
+		@endforeach
+	</select>
 
 	<button type="submit" class="btn btn-primary" action="update">Update</button>
 </form>
